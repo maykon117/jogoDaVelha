@@ -1,38 +1,38 @@
-// Seleciona todas as células do tabuleiro
+
 const cells = document.querySelectorAll('.cell');
 
-// Inicializa o tabuleiro e o jogador atual
+
 let board = Array(9).fill(null);
 let currentPlayer = 'X';
 
-// Define as combinações vencedoras possíveis
+
 const winningCombinations = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8], // Linhas
-    [0, 3, 6], [1, 4, 7], [2, 5, 8], // Colunas
-    [0, 4, 8], [2, 4, 6]             // Diagonais
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+    [0, 4, 8], [2, 4, 6]             
 ];
 
-// Função para verificar se há um vencedor
+
 function checkWin(board) {
     for (const combo of winningCombinations) {
         const [a, b, c] = combo;
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-            return board[a]; // Retorna o jogador vencedor ('X' ou 'O')
+            return board[a];
         }
     }
-    return null; // Nenhum vencedor
+    return null; 
 }
 
-// Função para gerar a árvore de jogo
+
 function generateGameTree(board, player) {
     let moves = [];
     
-    // Verifica se alguém venceu ou se deu empate
+   
     if (checkWin(board) || board.every(cell => cell !== null)) {
         return [];
     }
     
-    // Gera todas as possíveis jogadas
+ 
     for (let i = 0; i < board.length; i++) {
         if (board[i] === null) {
             let newBoard = [...board];
@@ -47,12 +47,12 @@ function generateGameTree(board, player) {
     return moves;
 }
 
-// Função para exibir as jogadas no container
+
 function displayGameTree(gameTree) {
     const movesContainer = document.getElementById('moves-container');
-    movesContainer.innerHTML = ''; // Limpa as jogadas anteriores
+    movesContainer.innerHTML = ''; 
     
-    // Cria um contêiner para armazenar as jogadas lado a lado
+  
     const rowWrapper = document.createElement('div');
     rowWrapper.style.display = 'flex';
     rowWrapper.style.flexWrap = 'wrap';
@@ -80,7 +80,7 @@ function displayGameTree(gameTree) {
     movesContainer.appendChild(rowWrapper);
 }
 
-// Função auxiliar para formatar o tabuleiro para exibição
+
 function formatBoardForDisplay(board) {
     const fragment = document.createDocumentFragment();
     
@@ -94,7 +94,7 @@ function formatBoardForDisplay(board) {
     return fragment;
 }
 
-// Função para processar clique nas células
+
 function handleClick(event) {
     const index = event.target.dataset.index;
     if (!board[index]) {
@@ -109,29 +109,29 @@ function handleClick(event) {
             resetGame();
         } else {
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            updateCurrentPlayerDisplay(); // Atualiza o jogador atual
+            updateCurrentPlayerDisplay(); 
             const gameTree = generateGameTree(board, currentPlayer);
             displayGameTree(gameTree);
         }
     }
 }
 
-// Função para resetar o jogo
+
 function resetGame() {
     board = Array(9).fill(null);
     cells.forEach(cell => cell.textContent = '');
     currentPlayer = 'X';
-    updateCurrentPlayerDisplay(); // Atualiza o jogador atual
-    document.getElementById('moves-container').innerHTML = ''; // Limpa as jogadas anteriores
+    updateCurrentPlayerDisplay(); 
+    document.getElementById('moves-container').innerHTML = ''; 
 }
 
-// Função para atualizar o display do jogador atual
+
 function updateCurrentPlayerDisplay() {
     document.getElementById('current-player').textContent = `Jogador Atual: ${currentPlayer}`;
 }
 
-// Adiciona eventos de clique às células
+
 cells.forEach(cell => cell.addEventListener('click', handleClick));
 
-// Atualiza o jogo inicial para mostrar o jogador atual
+
 updateCurrentPlayerDisplay();
